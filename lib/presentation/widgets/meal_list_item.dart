@@ -35,13 +35,17 @@ class MealListitem extends StatelessWidget {
         onTap: () => onShowMealDetail(context, meal),
         child: Stack(
           children: [
-            // afficher l'image de facon fluide
-            FadeInImage(
-              placeholder: MemoryImage(kTransparentImage),
-              image: NetworkImage(meal.imageUrl),
-              fit: BoxFit.cover,
-              height: 200,
-              width: double.infinity,
+            // Hero -> aminé un widget sur differents widgets (different écran)
+            Hero(
+              tag: meal.id,
+              // FadeInImage -> afficher l'image de facon fluide
+              child: FadeInImage(
+                placeholder: MemoryImage(kTransparentImage),
+                image: NetworkImage(meal.imageUrl),
+                fit: BoxFit.cover,
+                height: 200,
+                width: double.infinity,
+              ),
             ),
             Positioned(
               left: 0,
