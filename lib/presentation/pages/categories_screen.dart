@@ -34,6 +34,7 @@ class _CategoriesScreenState extends State<CategoriesScreen>
       lowerBound: 0,
       upperBound: 1,
     );
+    _animationController.forward();
   }
 
   @override
@@ -67,24 +68,32 @@ class _CategoriesScreenState extends State<CategoriesScreen>
   Widget build(BuildContext context) {
     // GridView -> si vous n'avez pas beaucoup d'elt à afficher
     // GridView.builder -> et autres si vous avez many d'elt to show
-    return GridView(
-      padding: const EdgeInsets.all(24),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2, // deux colonnes
-        childAspectRatio: 3 / 2, // taille des elt(grids)
-        crossAxisSpacing: 20, // espacement horizontal colonnes
-        mainAxisSpacing: 20, // espacement vertical colonnes
+    return AnimatedBuilder(
+      animation: _animationController,
+      child: GridView(
+        padding: const EdgeInsets.all(24),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, // deux colonnes
+          childAspectRatio: 3 / 2, // taille des elt(grids)
+          crossAxisSpacing: 20, // espacement horizontal colonnes
+          mainAxisSpacing: 20, // espacement vertical colonnes
+        ),
+        children: [
+          // ...availableCategories
+          //     .map((category) => CategoryGridItem(category: category))
+          //     .toList(),
+          for (final category in availableCategories)
+            CategoryGridItem(
+              category: category,
+              onSelectCategory: () => _selectCategory(context, category),
+            ),
+        ],
       ),
-      children: [
-        // ...availableCategories
-        //     .map((category) => CategoryGridItem(category: category))
-        //     .toList(),
-        for (final category in availableCategories)
-          CategoryGridItem(
-            category: category,
-            onSelectCategory: () => _selectCategory(context, category),
-          ),
-      ],
+      builder: (context, child) => Padding(
+        // start value is 0 => 0*100 = 0
+        padding: EdgeInsets.only(top: 100 - _animationController.value * 100),
+        child: child,
+      ),
     );
   }
 }
