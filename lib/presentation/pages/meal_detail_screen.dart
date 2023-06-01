@@ -42,15 +42,20 @@ class MealDetailScreen extends ConsumerWidget {
                 ),
               );
             },
+            // AnimatedSwitcher -> utiliser pour animée deux values
             icon: AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
               transitionBuilder: (child, animation) {
                 return RotationTransition(
-                  turns: animation,
+                  // avoir le controle sur l'animation
+                  turns: Tween<double>(begin: 0.8, end: 1).animate(animation),
                   child: child,
                 );
               },
-              child: Icon(isFavoite ? Icons.star : Icons.star_border),
+              child: Icon(
+                isFavoite ? Icons.star : Icons.star_border,
+                key: ValueKey(isFavoite),
+              ),
             ), // Icon(isFavoite ? Icons.star : Icons.star_border),
           ),
         ],
