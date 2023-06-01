@@ -5,7 +5,7 @@ import 'package:meals_app/domain/models/meals_model.dart';
 import 'package:meals_app/presentation/pages/meals_screen.dart';
 import 'package:meals_app/presentation/widgets/category_grid_item.dart';
 
-class CategoriesScreen extends StatelessWidget {
+class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({
     super.key,
     // required this.onToggleMealFavoriteStatus,
@@ -15,11 +15,39 @@ class CategoriesScreen extends StatelessWidget {
   // final void Function(MealsModel meal) onToggleMealFavoriteStatus;
   final List<MealsModel> availableMeals;
 
+  @override
+  State<CategoriesScreen> createState() => _CategoriesScreenState();
+}
+
+// with SingleTickerProviderStateMixin(une animation) & TickerProviderStateMixin(plusieurs animation) -> les deux ne sont pas souvent utiliser
+class _CategoriesScreenState extends State<CategoriesScreen>
+    with SingleTickerProviderStateMixin {
+  // late -> cette variable aura une value quand elle sera utiliser pour la 1ère fois
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(microseconds: 300),
+      lowerBound: 0,
+      upperBound: 1,
+    );
+  }
+
+  @override
+  void dispose() {
+    // supprimer l'annimation de la mémoire de l'appareil une fois que ce widget est remove
+    _animationController.dispose();
+    super.dispose();
+  }
+
   void _selectCategory(BuildContext context, CategoryModel category) {
     // where => renvoi une new list qui ne contient que les elt qui repondent à une certaine conditions
     /// true si la condition et vérifier et false si la condition n'est pas vérifier
     /// ce cas la fun renvoie true si le meal appartient à la catégory selectioné
-    final filterdMeals = availableMeals // dummyMeals
+    final filterdMeals = widget.availableMeals // dummyMeals
         .where((meal) => meal.categories.contains(category.id))
         .toList();
 
